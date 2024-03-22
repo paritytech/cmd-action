@@ -44,13 +44,14 @@ jobs:
       - name: Report failure
         if: ${{ failure() }}
         run: echo "Command failed!"
-      - name: Push changes
-        run: |
-          git config --global --add safe.directory /__w/cmd-action/cmd-action
-          git config --system user.name command-bot
-          git config --system user.email "github@users.noreply.github.com"
-          git add .
-          git commit -m "changes"
-          git push origin $BRANCH
-        env:
-          BRANCH: ${{ github.head_ref || github.ref_name }}
+      - uses: stefanzweifel/git-auto-commit-action@v5
+      # - name: Push changes
+      #   run: |
+      #     git config --global --add safe.directory /__w/cmd-action/cmd-action
+      #     git config --system user.name command-bot
+      #     git config --system user.email "github@users.noreply.github.com"
+      #     git add .
+      #     git commit -m "changes"
+      #     git push origin $BRANCH
+      #   env:
+      #     BRANCH: ${{ github.head_ref || github.ref_name }}
