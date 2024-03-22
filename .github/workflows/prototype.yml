@@ -1,0 +1,50 @@
+name: Continuous testing
+
+on: 
+  pull_request:
+
+jobs:
+  command-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      commands: ${{ steps.cmd.outputs.runtime }}
+    name: Extract commands from comment
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - id: cmd
+        run: echo "Body is $CMD"
+        env:
+          CMD: ${{ github.event.pull_request.body }}
+  # cmd:
+  #   needs: [command-matrix]
+  #   continue-on-error: true
+  #   strategy:
+  #     # This is a matrix with all the commands and machines
+  #     matrix:
+  #       cmd: ${{ fromJSON(needs.runtime-matrix.outputs.runtime) }}
+  #   # We set the current machine here (to differ between ours and generic ones)
+  #   runs-on: ${{ matrix.cmd.vm }}
+  #   container:
+  #     image: node:18
+  #     env:
+  #       NODE_ENV: development
+  #     ports:
+  #       - 80
+  #     volumes:
+  #       - my_docker_volume:/volume_mount
+  #     options: --cpus 1
+  #   steps:
+  #     - name: Download repo
+  #       uses: actions/checkout@v4.1.1
+  #     - name: Download script
+  #       # Here it would get the script from previous step
+  #       run: echo "$SCRIPT" > my-script.sh
+  #       env:
+  #         SCRIPT: ${{ matrix.cmd.script }}
+  #     - name: Run script
+  #       run: ./my-script.sh --thingy $PARAM
+  #       env:
+  #           PARAM: ${{ steps.prepare.output.param }}
+  #     - name: Report failure
+  #       if: ${{ failure() }}
+  #       run: echo "Command failed!"
