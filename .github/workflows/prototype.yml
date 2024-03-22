@@ -44,3 +44,11 @@ jobs:
       - name: Report failure
         if: ${{ failure() }}
         run: echo "Command failed!"
+      - name: Push changes
+        run: |
+          git config --global user.name command-bot
+          git config --global user.email "<>"
+          git config --global pull.rebase false
+          git add .
+          git commit -m "changes"
+          git push
