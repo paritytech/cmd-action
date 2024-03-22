@@ -3,7 +3,7 @@ import { context, getOctokit } from "@actions/github";
 import { Context } from "@actions/github/lib/context";
 import { PullRequest } from "@octokit/webhooks-types";
 
-import { PullRequestApi } from "./github/pullRequest";
+import { PullRequestApi } from "./github/pullRequest"
 import { generateCoreLogger } from "./util";
 
 const getRepo = (ctx: Context) => {
