@@ -37,6 +37,7 @@ jobs:
         run: echo "$SCRIPT" >> my-script.sh
         env:
           SCRIPT: ${{ needs.command-matrix.outputs.commands }}
+      - run: chmod +x ./my-script.sh
       - run: cat ./my-script.sh
       - name: Run script
         run: ./my-script.sh
