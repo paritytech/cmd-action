@@ -46,6 +46,7 @@ jobs:
         run: echo "Command failed!"
       - name: Push changes
         run: |
+          git config --global --add safe.directory /__w/cmd-action/cmd-action
           git config --system user.name command-bot
           git config --system user.email "github@users.noreply.github.com"
           git add .
