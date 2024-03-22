@@ -1,0 +1,60 @@
+name: Continuous testing
+
+on: 
+  pull_request:
+
+jobs:
+  command-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      commands: ${{ steps.cmd.outputs.cmd }}
+    name: Extract commands from comment
+    steps:
+      - uses: actions/checkout@v4.1.1
+      - id: cmd
+        run: echo "cmd=$CMD" >> "$GITHUB_OUTPUT"
+        env:
+          CMD: ${{ github.event.pull_request.body }}
+  cmd:
+    needs: [command-matrix]
+    continue-on-error: true
+    # We set the current machine here (to differ between ours and generic ones)
+    runs-on: ubuntu-latest
+    container:
+      image: node:20
+      env:
+        NODE_ENV: development
+      ports:
+        - 80
+      volumes:
+        - my_docker_volume:/volume_mount
+      options: --cpus 1
+    steps:
+      - name: Download repo
+        uses: actions/checkout@v4.1.1
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Generate script
+        # Here it would get the script from previous step
+        run: echo "$SCRIPT" >> my-script.sh
+        env:
+          SCRIPT: ${{ needs.command-matrix.outputs.commands }}
+      - run: chmod +x ./my-script.sh
+      - run: cat ./my-script.sh
+      - name: Run script
+        run: ./my-script.sh
+      - name: Report failure
+        if: ${{ failure() }}
+        run: echo "Command failed!"
+      # - run: git status
+      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Push changes
+        run: |
+          git config --global --add safe.directory /__w/cmd-action/cmd-action
+          git config --system user.name command-bot
+          git config --system user.email "github@users.noreply.github.com"
+          git add .
+          git commit -m "changes"
+          git push origin $BRANCH
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
