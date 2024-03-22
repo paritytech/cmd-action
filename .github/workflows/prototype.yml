@@ -7,7 +7,7 @@ jobs:
   command-matrix:
     runs-on: ubuntu-latest
     outputs:
-      commands: ${{ steps.cmd.outputs.runtime }}
+      commands: ${{ steps.cmd.outputs.cmd }}
     name: Extract commands from comment
     steps:
       - uses: actions/checkout@v4.1.1
@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Download repo
         uses: actions/checkout@v4.1.1
-      - name: Run script
+      - name: Generate script
         # Here it would get the script from previous step
         run: echo "$SCRIPT" >> my-script.sh
         env:
