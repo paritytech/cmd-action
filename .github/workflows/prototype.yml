@@ -51,4 +51,6 @@ jobs:
           git config --system user.email "github@users.noreply.github.com"
           git add .
           git commit -m "changes"
-          git push
+          git push origin $BRANCH
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
