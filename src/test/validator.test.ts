@@ -1,7 +1,7 @@
 import { Command } from "../schema/command";
 import { validateConfig } from "../schema/validator";
 
-test("test good command", async () => {
+test("test good command", () => {
   const goodCommand: Command = {
     name: "Hi",
     timeout: 10,
@@ -10,7 +10,7 @@ test("test good command", async () => {
   validateConfig(goodCommand);
 });
 
-test("test bad command", async () => {
+test("test bad command", () => {
   const badCommand = {
     timeout: -10,
     commandStart: "./bin",
