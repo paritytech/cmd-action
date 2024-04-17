@@ -44,14 +44,13 @@ export class Commander {
       .addRaw(`There are ${commands.length} available commands`)
       .addEOL();
     for (const command of commands) {
-      text = text
-        .addHeading(command.name, 3)
-        .addHeading("File location", 4)
-        .addCodeBlock(command.location)
-        .addEOL();
+      text = text.addHeading(command.name, 2);
       if (command.description) {
         text = text.addRaw(command.description).addEOL();
       }
+      text = text
+        .addDetails("File location", `<code>${command.location}</code>`)
+        .addEOL();
       if (command.machine) {
         text = text.addHeading("Runs on").addList(command.machine);
       }
