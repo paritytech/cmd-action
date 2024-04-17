@@ -49,6 +49,7 @@ export class Commander {
         text = text.addRaw(command.description).addEOL();
       }
       text = text
+        .addEOL()
         .addDetails("File location", `<code>${command.location}</code>`)
         .addEOL();
       if (command.machine) {
