@@ -56,8 +56,8 @@ export class Commander {
       }
 
       text = text
-        .addHeading("Command that runs")
-        .addRaw(`\`${command.commandStart}\``)
+        .addHeading("Command that runs", 4)
+        .addCodeBlock(command.commandStart, "shell")
         .addEOL();
     }
 
