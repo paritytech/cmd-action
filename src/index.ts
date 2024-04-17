@@ -27,9 +27,9 @@ setOutput("repo", `${repo.owner}/${repo.repo}`);
 const scripts =
   getInput("commands-directory", { required: false }) ?? "./github/commands";
 
-const commander = new Commander(scripts);
-
 const logger = generateCoreLogger();
+const commander = new Commander(scripts, logger);
+
 
 // Handle both pull_request and pull_request_target
 if (context.eventName.includes("pull_request")) {
