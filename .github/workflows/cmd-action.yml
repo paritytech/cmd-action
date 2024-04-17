@@ -1,14 +1,12 @@
-name: Continuous testing
+name: Command-Action
 
 on: 
   pull_request:
-  push:
-    branches: ["main"]
 
 jobs:
   cmd-check:
     runs-on: ubuntu-latest
-    name: Parsing commands
+    name: Bot
     steps:
       - uses: actions/checkout@v4
       - uses: paritytech/cmd-action@main
