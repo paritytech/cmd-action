@@ -9,7 +9,7 @@ jobs:
     name: Bot
     steps:
       - uses: actions/checkout@v4
-      - uses: paritytech/cmd-action@main
+      - uses: paritytech/cmd-action@command/documentation
         with: 
           commands-directory: '.github/scripts'
           GITHUB_TOKEN: ${{ github.token }}
