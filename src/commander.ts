@@ -1,3 +1,4 @@
+import { readFile } from "fs/promises";
 import { parse } from "yaml";
 
 import { ActionLogger } from "./github/types";
@@ -21,7 +22,8 @@ export class Commander {
     const files = await findFilesWithExtension(this.scriptsDiretory, "yml");
     const commands: Command[] = [];
     for (const file of files) {
-      const command = parse(file) as Command;
+      const content = await readFile(file, "utf-8");
+      const command = parse(content) as Command;
       this.logger.info(`Parsing ${file}`);
       validateConfig(command);
       commands.push(command);
