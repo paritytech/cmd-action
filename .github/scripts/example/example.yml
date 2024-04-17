@@ -1,0 +1,3 @@
+name: Example command
+description: This command is just used for examples
+commandStart: 'echo "Hello World!"'
