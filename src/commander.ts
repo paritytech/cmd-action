@@ -1,3 +1,4 @@
+import { summary } from "@actions/core";
 import { readFile } from "fs/promises";
 import { parse } from "yaml";
 
@@ -31,5 +32,35 @@ export class Commander {
 
     this.commands = commands;
     return commands;
+  }
+
+  async documentCommands(): Promise<typeof summary> {
+    const commands = await this.getCommands();
+    let text = summary
+      .addHeading("Commands")
+      .addRaw(`There are ${commands.length} available commands`)
+      .addEOL();
+    for (const command of commands) {
+      text = text.addHeading(command.name, 3);
+      if (command.description) {
+        text = text.addRaw(command.description).addEOL();
+      }
+      if (command.machine) {
+        text = text.addHeading("Runs on").addList(command.machine);
+      }
+      if (command.timeout) {
+        text = text
+          .addHeading("Timeout", 4)
+          .addRaw(`${command.timeout} seconds`)
+          .addEOL();
+      }
+
+      text = text
+        .addHeading("Command that runs")
+        .addRaw(`\`${command.commandStart}\``)
+        .addEOL();
+    }
+
+    return text;
   }
 }

@@ -34,13 +34,14 @@ const commander = new Commander(scripts, logger);
 if (context.eventName.includes("pull_request")) {
   commander
     .getCommands()
-    .then((commands) =>
+    .then(async (commands) => {
       logger.info(
         `Found ${commands.length} valid commands: ${commands
           .map(({ name }) => name)
           .join(", ")}`,
-      ),
-    )
+      );
+      await (await commander.documentCommands()).write();
+    })
     .catch(setFailed);
 }
 
