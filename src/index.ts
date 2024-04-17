@@ -23,6 +23,8 @@ const getRepo = (ctx: Context) => {
 const repo = getRepo(context);
 
 setOutput("repo", `${repo.owner}/${repo.repo}`);
+const scripts =
+  getInput("commands-directory", { required: false }) ?? "./github/commands";
 
 if (context.payload.pull_request) {
   const token = getInput("GITHUB_TOKEN", { required: true });

@@ -1,0 +1,17 @@
+name: Continuous testing
+
+on: 
+  pull_request:
+  push:
+    branches: ["main"]
+
+jobs:
+  cmd-check:
+    runs-on: ubuntu-latest
+    name: Parsing commands
+    steps:
+      - uses: actions/checkout@v4
+      - uses: paritytech/cmd-action@main
+        with: 
+          commands-directory: '.github/scripts'
+          GITHUB_TOKEN: ${{ github.token }}
