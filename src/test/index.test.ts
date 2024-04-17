@@ -6,5 +6,5 @@ test("adds 1 + 2 to equal 3", () => {
 
 test("find files", async () => {
   const files = await findFilesWithExtension(".github/scripts", "yml");
-  console.log(files);
-})
+  expect(files.length).toBeGreaterThan(0);
+});
