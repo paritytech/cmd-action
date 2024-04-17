@@ -1,0 +1,15 @@
+name: Command-Action
+
+on: 
+  pull_request:
+
+jobs:
+  cmd-check:
+    runs-on: ubuntu-latest
+    name: Bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: paritytech/cmd-action@main
+        with: 
+          commands-directory: '.github/scripts'
+          GITHUB_TOKEN: ${{ github.token }}
