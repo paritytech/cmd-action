@@ -30,12 +30,17 @@ const scripts =
 const logger = generateCoreLogger();
 const commander = new Commander(scripts, logger);
 
-
 // Handle both pull_request and pull_request_target
 if (context.eventName.includes("pull_request")) {
   commander
     .getCommands()
-    .then(() => logger.info("Commands are valid"))
+    .then((commands) =>
+      logger.info(
+        `Found ${commands.length} valid commands: ${commands
+          .map(({ name }) => name)
+          .join(", ")}`,
+      ),
+    )
     .catch(setFailed);
 }
 
