@@ -1,5 +1,6 @@
 import { summary } from "@actions/core";
 import { readFile } from "fs/promises";
+import { dirname } from "path";
 import { parse } from "yaml";
 
 import { ActionLogger } from "./github/types";
@@ -25,6 +26,7 @@ export class Commander {
     for (const file of files) {
       const content = await readFile(file, "utf-8");
       const command = parse(content) as Command;
+      command.location = dirname(file);
       this.logger.info(`Parsing ${file}`);
       validateConfig(command);
       commands.push(command);
@@ -35,13 +37,18 @@ export class Commander {
   }
 
   async documentCommands(): Promise<typeof summary> {
+    this.logger.info("Generating documentation");
     const commands = await this.getCommands();
     let text = summary
       .addHeading("Commands")
       .addRaw(`There are ${commands.length} available commands`)
       .addEOL();
     for (const command of commands) {
-      text = text.addHeading(command.name, 3);
+      text = text
+        .addHeading(command.name, 3)
+        .addHeading("File location", 4)
+        .addCodeBlock(command.location)
+        .addEOL();
       if (command.description) {
         text = text.addRaw(command.description).addEOL();
       }
