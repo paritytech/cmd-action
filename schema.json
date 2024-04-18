@@ -1,0 +1,38 @@
+{
+    "$id": "https://github.com/paritytech/cmd-action/blob/main/schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Command Action",
+    "description": "Schema for writting commands for the cmd-action",
+    "type": "object",
+    "properties": {
+        "name": {
+            "description": "Name of the command",
+            "type": "string"
+        },
+        "description": {
+            "description": "Detailed information on what the command does",
+            "type": "string"
+        },
+        "machine": {
+            "description": "VM to run the command on",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        },
+        "timeout": {
+            "description": "Maximum time that the command can run before timing out",
+            "type": "number",
+            "exclusiveMinimum": 1
+        },
+        "commandStart": {
+            "description": "Bash command/file to start this command",
+            "type": "string"
+        }
+    },
+    "required": [
+        "name",
+        "commandStart"
+    ]
+}
