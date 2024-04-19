@@ -5,6 +5,7 @@ test("test good command", () => {
   const goodCommand: Command = {
     name: "Hi",
     timeout: 10,
+    location: "",
     commandStart: "./bin",
   };
   validateConfig(goodCommand);
