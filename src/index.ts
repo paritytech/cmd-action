@@ -1,10 +1,9 @@
-import { getInput, info, setFailed, setOutput } from "@actions/core";
-import { context, getOctokit } from "@actions/github";
+import { getInput, setFailed, setOutput } from "@actions/core";
+import { context } from "@actions/github";
 import { Context } from "@actions/github/lib/context";
-import { PullRequest } from "@octokit/webhooks-types";
+import { IssueCommentCreatedEvent } from "@octokit/webhooks-types";
 
 import { Commander } from "./commander";
-import { PullRequestApi } from "./github/pullRequest";
 import { generateCoreLogger } from "./util";
 
 const getRepo = (ctx: Context) => {
@@ -30,24 +29,25 @@ const scripts =
 const logger = generateCoreLogger();
 const commander = new Commander(scripts, logger);
 
-// Handle both pull_request and pull_request_target
-if (context.eventName.includes("pull_request")) {
-  commander
-    .getCommands()
-    .then(async (commands) => {
-      logger.info(
-        `Found ${commands.length} valid commands: ${commands
-          .map(({ name }) => name)
-          .join(", ")}`,
-      );
-      await (await commander.documentCommands()).write();
-    })
-    .catch(setFailed);
-}
+// We always parse the commands and generate docs on comment or PRs
+commander
+  .getCommands()
+  .then(async (commands) => {
+    logger.info(
+      `Found ${commands.length} valid commands: ${commands
+        .map(({ name }) => name)
+        .join(", ")}`,
+    );
+    await (await commander.documentCommands()).write();
+  })
+  .catch(setFailed);
 
-const token = getInput("GITHUB_TOKEN", { required: true });
-if (context.payload.pull_request) {
-  const api = new PullRequestApi(getOctokit(token), generateCoreLogger());
-  const author = api.getPrAuthor(context.payload.pull_request as PullRequest);
-  info("Author of the PR is " + author);
+// We parse commands only in the issue_comment event
+if (context.payload.comment) {
+  const event = context.payload as IssueCommentCreatedEvent;
+  const commands: string[] = event.comment.body.trim().split("\n");
+
+  const token = getInput("GITHUB_TOKEN", { required: true });
+
+  commander.parseComment(commands).then(() => console.log("DONE")).catch(setFailed);
 }

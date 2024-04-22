@@ -1,4 +1,4 @@
-import { summary } from "@actions/core";
+import { setOutput, summary } from "@actions/core";
 import { readFile } from "fs/promises";
 import { dirname } from "path";
 import { parse } from "yaml";
@@ -14,7 +14,7 @@ export class Commander {
   constructor(
     private readonly scriptsDiretory: string,
     private readonly logger: ActionLogger,
-  ) {}
+  ) { }
 
   /** Get all the commands from a specific directory and validates them */
   async getCommands(): Promise<Command[]> {
@@ -69,5 +69,28 @@ export class Commander {
     }
 
     return text;
+  }
+
+  async parseComment(lines: string[]) {
+    const commands = await this.getCommands();
+    const outputs: string[] = [];
+    for (const comment of lines) {
+      // parse "/bot command"
+      const [_, command] = comment.split(" ");
+
+      const matchingCommand = commands.findIndex(
+        ({ name }) => name === command,
+      );
+      if (matchingCommand < 0) {
+        throw new Error(
+          `Command ${command} not found. ` +
+          "Please see the documentation for valid commands",
+        );
+      }
+
+      outputs.push(commands[matchingCommand].commandStart);
+    }
+
+    setOutput("commands", JSON.stringify(outputs));
   }
 }
