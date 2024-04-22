@@ -1,0 +1,37 @@
+name: 'run-cmd'
+description: 'Run command'
+inputs:
+  branch:  # id of input
+    description: 'Branch name'
+    required: true
+  command:
+    description: "Command to be run"
+    required: true
+runs:
+  using: "composite"
+  steps:
+      - name: Download repo
+        uses: actions/checkout@v4.1.1
+        with:
+          ref: ${{ inputs.branch }}
+      - name: Generate script
+        shell: bash
+        # Here it would get the script from previous step
+        run: |
+          echo "$COMMAND" >> command.sh
+          chmod +x command.sh
+          ./command.sh
+          rm command.sh
+        env:
+          COMMAND: ${{ inputs.command }}
+      - name: Report failure
+        if: ${{ failure() }}
+        shell: bash
+        run: echo "Command failed!"
+      - name: Check changes
+        shell: bash
+        run: |
+          git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+          git config --system user.name command-bot
+          git config --system user.email "github@users.noreply.github.com"
+          git status
