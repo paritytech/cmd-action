@@ -78,6 +78,8 @@ export class Commander {
       // parse "/bot command"
       const [_, command] = comment.split(" ");
 
+      this.logger.info(`Searching for command '${command}'`);
+
       const matchingCommand = commands.findIndex(
         ({ name }) => name === command,
       );
