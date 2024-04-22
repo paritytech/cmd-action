@@ -1,4 +1,4 @@
-import { setOutput, summary } from "@actions/core";
+import { summary } from "@actions/core";
 import { readFile } from "fs/promises";
 import { dirname } from "path";
 import { parse } from "yaml";
@@ -14,7 +14,7 @@ export class Commander {
   constructor(
     private readonly scriptsDiretory: string,
     private readonly logger: ActionLogger,
-  ) { }
+  ) {}
 
   /** Get all the commands from a specific directory and validates them */
   async getCommands(): Promise<Command[]> {
@@ -86,7 +86,7 @@ export class Commander {
       if (matchingCommand < 0) {
         throw new Error(
           `Command ${command} not found. ` +
-          "Please see the documentation for valid commands",
+            "Please see the documentation for valid commands",
         );
       }
 
