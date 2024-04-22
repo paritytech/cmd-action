@@ -30,6 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
       - uses: paritytech/cmd-action@main
+        id: cmd
         with: 
           commands-directory: '.github/scripts'
       - name: Export branch name
