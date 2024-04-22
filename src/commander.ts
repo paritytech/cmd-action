@@ -76,7 +76,7 @@ export class Commander {
     const outputs: string[] = [];
     for (const comment of lines) {
       // parse "/bot command"
-      const [_, command] = comment.split(" ");
+      const [_, command] = comment.trim().split(" ");
 
       this.logger.info(`Searching for command '${command}'`);
 
