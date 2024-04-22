@@ -71,7 +71,7 @@ export class Commander {
     return text;
   }
 
-  async parseComment(lines: string[]) {
+  async parseComment(lines: string[]): Promise<string[]> {
     const commands = await this.getCommands();
     const outputs: string[] = [];
     for (const comment of lines) {
@@ -93,6 +93,6 @@ export class Commander {
       outputs.push(commands[matchingCommand].commandStart);
     }
 
-    setOutput("commands", JSON.stringify(outputs));
+    return outputs;
   }
 }

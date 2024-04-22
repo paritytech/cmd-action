@@ -47,7 +47,8 @@ if (context.payload.comment) {
   const event = context.payload as IssueCommentCreatedEvent;
   const commands: string[] = event.comment.body.trim().split("\n");
 
-  const token = getInput("GITHUB_TOKEN", { required: true });
-
-  commander.parseComment(commands).then(() => console.log("DONE")).catch(setFailed);
+  commander
+    .parseComment(commands)
+    .then((output) => setOutput("commands", output))
+    .catch(setFailed);
 }
