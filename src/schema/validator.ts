@@ -4,7 +4,7 @@ import Joi from "joi";
 import { Command } from "./command";
 
 const commandSchema = Joi.object<Command>().keys({
-  name: Joi.string().required(),
+  name: Joi.string().trim().required(),
   description: Joi.string().optional(),
   machine: Joi.array().items(Joi.string()).optional(),
   timeout: Joi.number().min(1).optional(),
