@@ -34,4 +34,8 @@ runs:
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
           git config --system user.name command-bot
           git config --system user.email "github@users.noreply.github.com"
-          git status
+          git add .
+          git commit -m "cmd-action - changes"
+          git push origin $BRANCH
+        env:
+          BRANCH: ${{ inputs.branch }}
