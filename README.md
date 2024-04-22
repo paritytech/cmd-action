@@ -39,6 +39,7 @@ jobs:
 
   cmd-run:
     needs: [cmd-check]
+    if: ${{ github.event.issue.pull_request }}
     continue-on-error: true
     # We set the current machine here (to differ between ours and generic ones)
     runs-on: ubuntu-latest
