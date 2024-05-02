@@ -31,6 +31,7 @@ runs:
       - name: Check changes
         shell: bash
         run: |
+          echo "Adding $(pwd) as safe directory"
           git config --global --add safe.directory $(pwd)
           git config --system user.name command-bot
           git config --system user.email "github@users.noreply.github.com"
