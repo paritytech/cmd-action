@@ -13,7 +13,7 @@ jobs:
       branch: ${{ steps.branch.outputs.branch }}
     name: Bot
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4
       # Switch to the PR branch if it's triggered by a comment
       - run: gh pr checkout ${{ github.event.issue.number || github.event.pull_request.number }}
         if: ${{ github.event.issue.pull_request }}
