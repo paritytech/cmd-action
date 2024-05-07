@@ -28,14 +28,3 @@ runs:
         if: ${{ failure() }}
         shell: bash
         run: echo "Command failed!"
-      - name: Check changes
-        shell: bash
-        run: |
-          git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
-          git config --system user.name command-bot
-          git config --system user.email "github@users.noreply.github.com"
-          git add .
-          git commit -m "cmd-action - changes"
-          git push origin $BRANCH
-        env:
-          BRANCH: ${{ inputs.branch }}

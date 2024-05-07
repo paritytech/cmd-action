@@ -52,6 +52,11 @@ jobs:
         with:
           branch: ${{ needs.cmd-check.outputs.branch }}
           command: ${{ matrix.command }}
+        # If you need to push your changes you can do so like this
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: cmd-action - changes
+          branch: ${{ needs.cmd-check.outputs.branch }}
 ```
 
 #### Inputs
