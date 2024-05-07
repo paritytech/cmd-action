@@ -12,6 +12,8 @@ inputs:
 outputs:
   repo:
     description: 'The name of the repo in owner/repo pattern'
+  commands:
+    description: "An array of commands to execute"
 
 runs:
   using: 'docker'

@@ -4,7 +4,7 @@ outputs:
   branch:  # id of input
     description: 'Branch name'
     value: ${{ steps.branch.outputs.branch }}
-  command:
+  commands:
     description: "Command to be run"
     value: ${{ steps.cmd.outputs.commands }}
 runs:
