@@ -19,23 +19,12 @@ jobs:
   cmd-check:
     runs-on: ubuntu-latest
     outputs:
-      commands: ${{ steps.cmd.outputs.commands }}
-      branch: ${{ steps.branch.outputs.branch }}
+      commands: ${{ steps.command.outputs.commands }}
+      branch: ${{ steps.command.outputs.branch }}
     name: Bot
     steps:
-      - uses: actions/checkout@v4.1.1
-      # Switch to the PR branch if it's triggered by a comment
-      - run: gh pr checkout ${{ github.event.issue.number || github.event.pull_request.number }}
-        if: ${{ github.event.issue.pull_request }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-      - uses: paritytech/cmd-action@main
-        id: cmd
-        with: 
-          commands-directory: '.github/scripts'
-      - name: Export branch name
-        run: echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> "$GITHUB_OUTPUT"
-        id: branch
+      - uses: paritytech/cmd-action/check@parse-comment
+        id: command
 
   cmd-run:
     needs: [cmd-check]
@@ -44,6 +33,7 @@ jobs:
     # We set the current machine here (to differ between ours and generic ones)
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         command: ${{ fromJson(needs.cmd-check.outputs.commands) }}
     name: Run command
