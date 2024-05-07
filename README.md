@@ -23,7 +23,7 @@ jobs:
       branch: ${{ steps.command.outputs.branch }}
     name: Bot
     steps:
-      - uses: paritytech/cmd-action/check@parse-comment
+      - uses: paritytech/cmd-action/check@main
         id: command
 
   cmd-run:
