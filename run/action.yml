@@ -17,11 +17,7 @@ runs:
       - name: Generate script
         shell: bash
         # Here it would get the script from previous step
-        run: |
-          echo "$COMMAND" >> command.sh
-          chmod +x command.sh
-          ./command.sh
-          rm command.sh
+        run: bash -c "$COMMAND"
         env:
           COMMAND: ${{ inputs.command }}
       - name: Report failure
