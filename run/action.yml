@@ -7,6 +7,9 @@ inputs:
   command:
     description: "Command to be run"
     required: true
+  pr-number:
+    description: "Number of the PR"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -23,4 +26,6 @@ runs:
       - name: Report failure
         if: ${{ failure() }}
         shell: bash
-        run: echo "Command failed!"
+        run: gh pr comment ${{ inputs.pr-number }} --body "Run for `${{ inputs.command}}` failed. See logs <a href=\"$RUN\">here</a>."
+        env:
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
