@@ -70,4 +70,29 @@ export class Commander {
 
     return text;
   }
+
+  async parseComment(lines: string[]): Promise<string[]> {
+    const commands = await this.getCommands();
+    const outputs: string[] = [];
+    for (const comment of lines) {
+      // parse "/bot command"
+      const [_, command] = comment.trim().split(" ");
+
+      this.logger.info(`Searching for command '${command}'`);
+
+      const matchingCommand = commands.findIndex(
+        ({ name }) => name === command,
+      );
+      if (matchingCommand < 0) {
+        throw new Error(
+          `Command ${command} not found. ` +
+            "Please see the documentation for valid commands",
+        );
+      }
+
+      outputs.push(commands[matchingCommand].commandStart);
+    }
+
+    return outputs;
+  }
 }

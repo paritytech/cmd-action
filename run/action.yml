@@ -1,0 +1,26 @@
+name: 'run-cmd'
+description: 'Run command'
+inputs:
+  branch:  # id of input
+    description: 'Branch name'
+    required: true
+  command:
+    description: "Command to be run"
+    required: true
+runs:
+  using: "composite"
+  steps:
+      - name: Download repo
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.branch }}
+      - name: Generate script
+        shell: bash
+        # Here it would get the script from previous step
+        run: bash -c "$COMMAND"
+        env:
+          COMMAND: ${{ inputs.command }}
+      - name: Report failure
+        if: ${{ failure() }}
+        shell: bash
+        run: echo "Command failed!"

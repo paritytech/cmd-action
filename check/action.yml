@@ -1,0 +1,27 @@
+name: 'check-cmd'
+description: 'Check command'
+outputs:
+  branch:  # id of input
+    description: 'Branch name'
+    value: ${{ steps.branch.outputs.branch }}
+  commands:
+    description: "Command to be run"
+    value: ${{ steps.cmd.outputs.commands }}
+runs:
+  using: "composite"
+  steps:
+      - uses: actions/checkout@v4
+      # Switch to the PR branch if it's triggered by a comment
+      - run: gh pr checkout ${{ github.event.issue.number || github.event.pull_request.number }}
+        if: ${{ github.event.issue.pull_request }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - uses: paritytech/cmd-action@main
+        id: cmd
+        with: 
+          commands-directory: '.github/scripts'
+      - name: Export branch name
+        shell: bash
+        run: echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> "$GITHUB_OUTPUT"
+        id: branch
