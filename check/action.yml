@@ -21,6 +21,7 @@ runs:
         id: cmd
         with: 
           commands-directory: '.github/scripts'
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Export branch name
         shell: bash
         run: echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> "$GITHUB_OUTPUT"
