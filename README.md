@@ -32,7 +32,6 @@ jobs:
     continue-on-error: true
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
       matrix:
         command: ${{ fromJson(needs.cmd-check.outputs.commands) }}
     name: Run command
