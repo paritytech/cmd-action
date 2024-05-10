@@ -25,3 +25,17 @@ runs:
         shell: bash
         run: echo "branch=$(git rev-parse --abbrev-ref HEAD)" >> "$GITHUB_OUTPUT"
         id: branch
+      - name: Report error
+        if: ${{ failure() }}
+        run: gh pr comment ${{ github.event.pull_request.number }} --body "There was an error parsing your command. See logs <a href=\"$RUN\">here</a>."
+        shell: bash
+        env:
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Report run
+        run: gh pr comment ${{ github.event.pull_request.number }} --body "Your command has started. Follow the logs <a href=\"$RUN\">here</a>."
+        shell: bash
+        env:
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GITHUB_TOKEN: ${{ github.token }}
+
