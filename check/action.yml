@@ -17,7 +17,7 @@ runs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - uses: paritytech/cmd-action@main
+      - uses: paritytech/cmd-action@error/report-with-comment
         id: cmd
         with: 
           commands-directory: '.github/scripts'
