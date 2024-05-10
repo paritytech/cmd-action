@@ -47,6 +47,19 @@ jobs:
         with:
           commit_message: cmd-action - changes
           branch: ${{ needs.cmd-check.outputs.branch }}
+          pr-number: ${{ github.event.issue.number || github.event.pull_request.number }}
+    conclude:
+      runs-on: ubuntu-latest
+      name: Checks passed
+      needs: [cmd-run] # It will only run if all the runs were completed
+      steps:
+      - name: Report Success
+        shell: bash
+        run: gh pr comment $NUMBER --body "Completed action run. See logs <a href=\"$RUN\">here</a>."
+        env:
+          RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.issue.number || github.event.pull_request.number }}
 ```
 
 #### Inputs
