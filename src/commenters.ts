@@ -9,7 +9,7 @@ export class Commenter {
     private readonly comment: IssueCommentCreatedEvent,
     private readonly actionUrl: string,
     private readonly logger: ActionLogger,
-  ) { }
+  ) {}
 
   async commentError(): Promise<void> {
     this.logger.debug(`Reacting with -1 to ${this.comment.comment.id}`);
@@ -24,7 +24,9 @@ export class Commenter {
     await this.github.rest.issues.createComment({
       ...this.repo,
       issue_number: this.comment.issue.number,
-      body: `## Failed while parsing <a href="${this.comment.issue.html_url}">command</a> ❌\n\n` + `Find error in <a href="${this.actionUrl}">the logs</a>.`,
+      body:
+        `## Failed while parsing <a href="${this.comment.issue.html_url}">command</a> ❌\n\n` +
+        `Find error in <a href="${this.actionUrl}">the logs</a>.`,
     });
   }
 
@@ -41,7 +43,9 @@ export class Commenter {
     await this.github.rest.issues.createComment({
       ...this.repo,
       issue_number: this.comment.issue.number,
-      body: `Run has been triggered by <a href="${this.comment.issue.html_url}">command</a>.\n` + `Follow it in <a href="${this.actionUrl}">here</a>.`,
+      body:
+        `Run has been triggered by <a href="${this.comment.issue.html_url}">command</a>.\n` +
+        `Follow it in <a href="${this.actionUrl}">here</a>.`,
     });
   }
 }
