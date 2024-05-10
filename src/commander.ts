@@ -14,7 +14,7 @@ export class Commander {
   constructor(
     private readonly scriptsDiretory: string,
     private readonly logger: ActionLogger,
-  ) {}
+  ) { }
 
   /** Get all the commands from a specific directory and validates them */
   async getCommands(): Promise<Command[]> {
@@ -71,9 +71,9 @@ export class Commander {
     return text;
   }
 
-  async parseComment(lines: string[]): Promise<string[]> {
+  async parseComment(lines: string[]): Promise<{ name: string, command: string }[]> {
     const commands = await this.getCommands();
-    const outputs: string[] = [];
+    const outputs: { name: string, command: string }[] = [];
     for (const comment of lines) {
       // parse "/bot command"
       const [_, command] = comment.trim().split(" ");
@@ -86,11 +86,12 @@ export class Commander {
       if (matchingCommand < 0) {
         throw new Error(
           `Command ${command} not found. ` +
-            "Please see the documentation for valid commands",
+          "Please see the documentation for valid commands",
         );
       }
 
-      outputs.push(commands[matchingCommand].commandStart);
+      const matching = commands[matchingCommand];
+      outputs.push({ name: matching.name, command: matching.commandStart });
     }
 
     return outputs;

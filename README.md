@@ -40,7 +40,8 @@ jobs:
       - uses: paritytech/cmd-action/run@main
         with:
           branch: ${{ needs.cmd-check.outputs.branch }}
-          command: ${{ matrix.command }}
+          command: ${{ matrix.command.command }}
+          name: ${{ matrix.command.name }}
           pr-number: ${{ github.event.issue.number || github.event.pull_request.number }}
         # If you need to push your changes you can do so like this
       - uses: stefanzweifel/git-auto-commit-action@v5

@@ -4,6 +4,9 @@ inputs:
   branch:  # id of input
     description: 'Branch name'
     required: true
+  name:
+    description: "Name of the command"
+    required: true
   command:
     description: "Command to be run"
     required: true
@@ -26,7 +29,7 @@ runs:
       - name: Report failure
         if: ${{ failure() }}
         shell: bash
-        run: gh pr comment ${{ inputs.pr-number }} --body "Run for <code>${{ inputs.command}}</code> failed. See logs <a href=\"$RUN\">here</a>."
+        run: gh pr comment ${{ inputs.pr-number }} --body "Run for <code>${{ inputs.name }}</code> failed. See logs <a href=\"$RUN\">here</a>."
         env:
           RUN: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           GH_TOKEN: ${{ github.token }}
