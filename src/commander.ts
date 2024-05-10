@@ -71,9 +71,11 @@ export class Commander {
     return text;
   }
 
-  async parseComment(lines: string[]): Promise<string[]> {
+  async parseComment(
+    lines: string[],
+  ): Promise<{ name: string; command: string }[]> {
     const commands = await this.getCommands();
-    const outputs: string[] = [];
+    const outputs: { name: string; command: string }[] = [];
     for (const comment of lines) {
       // parse "/bot command"
       const [_, command] = comment.trim().split(" ");
@@ -90,7 +92,8 @@ export class Commander {
         );
       }
 
-      outputs.push(commands[matchingCommand].commandStart);
+      const matching = commands[matchingCommand];
+      outputs.push({ name: matching.name, command: matching.commandStart });
     }
 
     return outputs;
