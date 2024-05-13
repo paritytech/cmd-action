@@ -11,7 +11,9 @@ const commandSchema = Joi.object<Command>().keys({
   commandStart: Joi.string().required(),
 });
 
-export const validateConfig = (config: Command): Command | never =>
+type JoiCommand = Omit<Command, "filename">;
+
+export const validateConfig = (config: JoiCommand): JoiCommand | never =>
   validate<Command>(config, commandSchema, {
     message: "Command file is invalid",
   });
