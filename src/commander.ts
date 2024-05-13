@@ -86,7 +86,7 @@ export class Commander {
       this.logger.info(`Searching for command '${command}'`);
 
       const matchingCommand = commands.findIndex(
-        ({ name }) => name === command,
+        ({ filename }) => filename === command,
       );
       if (matchingCommand < 0) {
         throw new Error(
