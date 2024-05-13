@@ -1,6 +1,6 @@
 import { summary } from "@actions/core";
-import { readFile } from "fs/promises";
-import { dirname } from "path";
+import { readFile, } from "fs/promises";
+import path from "path";
 import { parse } from "yaml";
 
 import { ActionLogger } from "./github/types";
@@ -14,7 +14,7 @@ export class Commander {
   constructor(
     private readonly scriptsDiretory: string,
     private readonly logger: ActionLogger,
-  ) {}
+  ) { }
 
   /** Get all the commands from a specific directory and validates them */
   async getCommands(): Promise<Command[]> {
@@ -25,9 +25,10 @@ export class Commander {
     const commands: Command[] = [];
     for (const file of files) {
       const content = await readFile(file, "utf-8");
-      const command = parse(content) as Command;
-      command.location = dirname(file);
       this.logger.info(`Parsing ${file}`);
+      const command = parse(content) as Command;
+      command.filename = path.basename(file, ".yml");
+      command.location = path.dirname(file);
       validateConfig(command);
       commands.push(command);
     }
@@ -49,6 +50,8 @@ export class Commander {
         text = text.addRaw(command.description).addEOL();
       }
       text = text
+        .addEOL()
+        .addRaw(`How to run: <code>/cmd ${command.filename}</code>`)
         .addEOL()
         .addDetails("File location", `<code>${command.location}</code>`)
         .addEOL();
@@ -77,7 +80,7 @@ export class Commander {
     const commands = await this.getCommands();
     const outputs: { name: string; command: string }[] = [];
     for (const comment of lines) {
-      // parse "/bot command"
+      // parse "/cmd command"
       const [_, command] = comment.trim().split(" ");
 
       this.logger.info(`Searching for command '${command}'`);
@@ -88,7 +91,7 @@ export class Commander {
       if (matchingCommand < 0) {
         throw new Error(
           `Command ${command} not found. ` +
-            "Please see the documentation for valid commands",
+          "Please see the documentation for valid commands",
         );
       }
 
