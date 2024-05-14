@@ -26,6 +26,9 @@ jobs:
         command: ${{ fromJson(needs.cmd-check.outputs.commands) }}
     name: Run command
     steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
       - uses: paritytech/cmd-action/run@main
         with:
           branch: ${{ needs.cmd-check.outputs.branch }}

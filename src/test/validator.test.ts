@@ -2,7 +2,7 @@ import { Command } from "../schema/command";
 import { validateConfig } from "../schema/validator";
 
 test("test good command", () => {
-  const goodCommand: Command = {
+  const goodCommand: Omit<Command, "filename"> = {
     name: "Hi",
     timeout: 10,
     location: "",

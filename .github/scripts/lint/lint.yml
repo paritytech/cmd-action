@@ -1,0 +1,3 @@
+name: Lint
+description: This command lints the project
+commandStart: 'yarn install && yarn run fix'
