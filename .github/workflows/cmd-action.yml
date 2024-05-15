@@ -29,12 +29,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1.9.2
+        with:
+          app-id: ${{ secrets.CMD_APP_ID }}
+          private-key: ${{ secrets.CMD_APP_KEY }}
       - uses: paritytech/cmd-action/run@main
         with:
           branch: ${{ needs.cmd-check.outputs.branch }}
           command: ${{ matrix.command.command }}
           name: ${{ matrix.command.name }}
           pr-number: ${{ github.event.issue.number }}
+          token: ${{ steps.generate_token.outputs.token }}
         # If you need to push your changes you can do so like this
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
