@@ -36,12 +36,20 @@ jobs:
         command: ${{ fromJson(needs.cmd-check.outputs.commands) }}
     name: Run command
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1.9.2
+        with:
+          app-id: ${{ secrets.CMD_APP_ID }}
+          private-key: ${{ secrets.CMD_APP_KEY }}
       - uses: paritytech/cmd-action/run@main
         with:
           branch: ${{ needs.cmd-check.outputs.branch }}
           command: ${{ matrix.command.command }}
           name: ${{ matrix.command.name }}
           pr-number: ${{ github.event.issue.number || github.event.pull_request.number }}
+          # If you want to push from a specific account (and trigger PR checks)
+          token: ${{ steps.generate_token.outputs.token }}
         # If you need to push your changes you can do so like this
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:

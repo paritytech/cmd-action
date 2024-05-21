@@ -13,6 +13,9 @@ inputs:
   pr-number:
     description: "Number of the PR"
     required: true
+  token:
+    description: "GitHub token"
+    required: false
 runs:
   using: "composite"
   steps:
@@ -20,6 +23,7 @@ runs:
         uses: actions/checkout@v4
         with:
           ref: ${{ inputs.branch }}
+          token: ${{ inputs.token }}
       - name: Generate script
         shell: bash
         # Here it would get the script from previous step
