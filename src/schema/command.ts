@@ -6,10 +6,10 @@ export interface Command {
   machine?: string[];
   timeout?: number;
   commandStart: string;
-  parameters?: Parameters[];
+  parameters?: Parameter[];
 }
 
-export interface Parameters {
+export interface Parameter {
   name: string;
   description?: string;
   args: ParameterArgument[];
@@ -21,5 +21,5 @@ export interface ParameterArgument {
   options: string;
   example?: string;
   type: "string" | "one_of" | "regex";
-  input: unknown;
+  input: string | string[];
 }

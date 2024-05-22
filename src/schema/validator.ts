@@ -1,7 +1,7 @@
 import { validate } from "@eng-automation/js";
 import Joi from "joi";
 
-import { Command, Parameters, ParameterArgument } from "./command";
+import { Command, Parameter, ParameterArgument } from "./command";
 
 const parametersArgs = {
   arg: Joi.string().required(),
@@ -27,10 +27,10 @@ const regexParameter = Joi.object<ParameterArgument>().keys({
   input: Joi.array().items(Joi.string().required()),
 });
 
-const parameters = Joi.array<Parameters>().items({
+const parameters = Joi.array<Parameter>().items({
   name: Joi.string().required(),
   description: Joi.string().optional(),
-  args: Joi.array<Parameters["args"]>().items(
+  args: Joi.array<Parameter["args"]>().items(
     Joi.alternatives().try(stringParameter, oneOfParameter, regexParameter)
   ),
 });
