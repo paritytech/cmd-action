@@ -12,5 +12,14 @@ export interface Command {
 export interface Parameters {
   name: string;
   description?: string;
-  args: { arg: string; label: string; options: string }[];
+  args: ParameterArgument[];
+}
+
+export interface ParameterArgument {
+  arg: string;
+  label: string;
+  options: string;
+  example?: string;
+  type: "string" | "one_of" | "regex";
+  input: unknown;
 }

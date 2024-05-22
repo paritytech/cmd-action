@@ -1,3 +1,13 @@
 name: Example command
 description: This command is just used for examples
 commandStart: 'echo "Hello World!"'
+parameters:
+  - name: default
+    description: "Default parameters"
+    args:
+     - arg: chain
+       label: Chain
+       type: "one_of"
+       input:
+         - rococo
+         - westend
