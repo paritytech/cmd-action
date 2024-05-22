@@ -3,6 +3,7 @@ import fs from "fs/promises";
 import { resolve } from "path";
 
 import { ActionLogger } from "./github/types";
+import { Command, Parameter } from "./schema/command";
 
 export function generateCoreLogger(): ActionLogger {
   return { info, debug, warn: warning, error };
@@ -24,4 +25,20 @@ export async function findFilesWithExtension(
   }
 
   return files;
+}
+
+export class CommandError extends Error {
+  constructor(command: Command, message: string) {
+    const msg = `Error with '${command.name}': ${message}`;
+    super(msg);
+    this.message = msg;
+  }
+}
+
+export class ParameterError extends Error {
+  constructor(command: Command, parameter: Parameter, message: string) {
+    const msg = `Error with ${command.name}'s parameter '${parameter.name}': ${message}`;
+    super(msg);
+    this.message = msg;
+  }
 }
