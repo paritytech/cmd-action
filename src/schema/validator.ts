@@ -31,7 +31,7 @@ const parameters = Joi.array<Parameter>().items({
   name: Joi.string().required(),
   description: Joi.string().optional(),
   args: Joi.array<Parameter["args"]>().items(
-    Joi.alternatives().try(stringParameter, oneOfParameter, regexParameter)
+    Joi.alternatives().try(stringParameter, oneOfParameter, regexParameter),
   ),
 });
 

@@ -106,7 +106,7 @@ export class Commander {
     return outputs;
   }
 
-  parseCommand(command: Command, lineContent: string): string {
+  private parseCommand(command: Command, lineContent: string): string {
     const params = lineContent.trim().replace("/bot ", "").split(" ");
     if (!command.parameters) {
       return "";
@@ -171,7 +171,7 @@ export class Commander {
         const { type } = argument;
         switch (type) {
           case "one_of":
-            if (!(argument.input as string[]).indexOf(argValue)) {
+            if ((argument.input as string[]).indexOf(argValue) < 0) {
               throw new ParameterError(
                 command,
                 commandParameter,

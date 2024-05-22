@@ -11,7 +11,7 @@ export function generateCoreLogger(): ActionLogger {
 
 export async function findFilesWithExtension(
   dir: string,
-  ext: string
+  ext: string,
 ): Promise<string[]> {
   const files: string[] = [];
   const dirents = await fs.readdir(dir, { withFileTypes: true });
@@ -29,7 +29,7 @@ export async function findFilesWithExtension(
 
 export class CommandError extends Error {
   constructor(command: Command, message: string) {
-    const msg = `Error with ${command.name}: ${message}`;
+    const msg = `Error with '${command.name}': ${message}`;
     super(msg);
     this.message = msg;
   }
@@ -37,7 +37,7 @@ export class CommandError extends Error {
 
 export class ParameterError extends Error {
   constructor(command: Command, parameter: Parameter, message: string) {
-    const msg = `Error with ${command.name}'s parameter ${parameter.name}: ${message}`;
+    const msg = `Error with ${command.name}'s parameter '${parameter.name}': ${message}`;
     super(msg);
     this.message = msg;
   }
