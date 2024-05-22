@@ -152,10 +152,6 @@ export class Commander {
 
       if (i < 0) {
         if (argument.type === "one_of") {
-          console.log(
-            "Parameter is",
-            `--${argument.arg}=${(argument.input as string[])[0]}`,
-          );
           // We assign the first value
           saneParams.push(
             `--${argument.arg}=${(argument.input as string[])[0]}`,
@@ -173,23 +169,37 @@ export class Commander {
         const argValue = userArg.split("=")[1];
 
         const { type } = argument;
-        if (type === "one_of") {
-          if (!(argument.input as string[]).indexOf(argValue)) {
+        switch (type) {
+          case "one_of":
+            if (!(argument.input as string[]).indexOf(argValue)) {
+              throw new ParameterError(
+                command,
+                commandParameter,
+                `Argument ${argValue} does not match allowed values ${JSON.stringify(argument.input)}`,
+              );
+            }
+            break;
+          case "regex":
+            if (!argValue.match(argument.input as string)) {
+              throw new ParameterError(
+                command,
+                commandParameter,
+                `${argValue} does not match regex expression ${argument.input as string}`,
+              );
+            }
+            break;
+          case "string":
+            // Do we need any checks here?
+            break;
+          default:
             throw new ParameterError(
               command,
               commandParameter,
-              `Argument ${argValue} does not match allowed values ${JSON.stringify(argument.input)}`,
+              // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+              `Type ${type} not handled`,
             );
-          }
-        } else if (type === "regex") {
-          if (!argValue.match(argument.input as string)) {
-            throw new ParameterError(
-              command,
-              commandParameter,
-              `${argValue} does not match regex expression ${argument.input as string}`,
-            );
-          }
         }
+
         saneParams.push(userArg);
       }
     }
