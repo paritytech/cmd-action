@@ -1,6 +1,6 @@
 name: Example command
 description: This command is just used for examples
-commandStart: 'echo "Hello World!"'
+commandStart: 'echo "Hello World"'
 parameters:
   - name: default
     description: "Default parameters"
